@@ -29,14 +29,7 @@ export const App = () => {
       }
 
 			if (result) {
-				let allCarriers = result;				
-
-				allCarriers = allCarriers.sort((a, b) => {
-					const order = ["Metro PCS", "Boost", "Verizon", "Sprint", "T Mobile", "AT&T"];
-					return (order.indexOf(b.name) - order.indexOf(a.name)) || (order.indexOf(b.name) - order.indexOf(a.name));
-				});
-		
-				setAllCarriers(allCarriers);
+				setAllCarriers(result);
       }
     });
   };

@@ -2,8 +2,6 @@ import { useTracker } from 'meteor/react-meteor-data';
 
 import { AgencyDataCollection } from '/imports/api/agencyData';
 import { QueuesCollection } from '/imports/api/queues';
-import { QueueItemsCollection } from '/imports/api/queueItems';
-import { QueueContactsCollection } from '/imports/api/queueContact';
 import { CellPhoneCarrierCollection } from '/imports/api/cellPhoneCarrier';
 
 export const useAgencyData = () => useTracker(() => {
