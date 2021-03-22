@@ -1,7 +1,7 @@
 {
   "name": "@glopezcis/new-schedule-contact",
   "description": "New Schedule Contact Component",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "meteor run",
     "test": "meteor test --once --driver-package meteortesting:mocha",

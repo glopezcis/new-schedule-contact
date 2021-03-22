@@ -1,10 +1,25 @@
-# SmartTracker
+# New Schedule Contact Component
 
-Tracker for patients.
+New Schedule Contact component for SmartTracker App
 
-## Visualización
+## Install
 
 ```sh
 meteor npm install
-meteor
 ```
+## Methods
+
+- agencyData
+- allCarriers
+- queueById
+
+## Use
+ ```sh
+ <NewScheduleContact 
+  ...
+  agencyData={agencyData}
+  allCarriers={allCarriers}
+  queue={queueById}
+ />
+ ```
+ 

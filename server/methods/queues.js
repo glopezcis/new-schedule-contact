@@ -1,13 +1,13 @@
 import { QueuesCollection } from '/imports/api/queues';
 import { QueueContactsCollection } from '/imports/api/queueContact';
 import { QueueItemsCollection } from '/imports/api/queueItems';
-import { LabHistoriesCollection } from '/imports/api/labHistories';
+//import { LabHistoriesCollection } from '/imports/api/labHistories';
 import { AgencyDataCollection } from '/imports/api/agencyData';
-import { WaitlistsItemsCollection } from '/imports/api/waitlistsItems';
-import { WaitlistsCollection } from '/imports/api/waitlists';
-import { WaitlistSummariesCollection } from '/imports/api/waitlistSummaries';
-import { FormSchemesCollection } from '/imports/api/formSchemes';
-import { FormHistoriesCollection } from '/imports/api/formHistories';
+//import { WaitlistsItemsCollection } from '/imports/api/waitlistsItems';
+//import { WaitlistsCollection } from '/imports/api/waitlists';
+//import { WaitlistSummariesCollection } from '/imports/api/waitlistSummaries';
+//import { FormSchemesCollection } from '/imports/api/formSchemes';
+//import { FormHistoriesCollection } from '/imports/api/formHistories';
 import { EXECUTEDACTION } from '/imports/constants/constants';
 import shortid from 'shortid';
 import moment from 'moment';
@@ -302,6 +302,10 @@ Meteor.methods({
   getSMSType (){
     console.log(process.env.SEND_SMS);
     return process.env.SEND_SMS;
+  },
+
+  queueById(queueId) {
+    return QueuesCollection.findOne(queueId);
   },
 
   createNewQueue(data) {

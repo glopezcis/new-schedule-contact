@@ -37,18 +37,17 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 		selfRegistrationWithContact,
 		eventLinkedQueueInWaitlist,
 		languageChangeProps,
-		useAgencyData,
-		useAllCarriers,
-		useQueueById
+		agencyData,
+		allCarriers,
+		queue
 	} = props;
-	
+
 	let initDateOfContact = null;
 	let initDob = null;
 	let initDobInput = null;
 	const onlyLettersRegex = /^[a-zA-Z]*$/g
 	const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g
 
-	const { agencyData } = useAgencyData();
 	const [ initialValues, setInitialValues ] = useState({});
 	const [ urlCard, setUrlCard ] = useState(null);
 	const [ loadingCard, setLoadingCard ] = useState(false);
@@ -71,11 +70,9 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 	const [emailValue, setEmailValue] = useState(null);
 	const [emailFormatError, setEmailFormatError] = useState(false)
 	const [ carrier, setCarrier ] = useState('');
-	const { allCarriers } = useAllCarriers();
 	const [zipcodeToSearch, setZipcodeToSearch] = useState(null);
 	const [zipcodeSearching, setZipcodeSearching] = useState(null);
 	const [zipcodes, setZipcodes] = useState(null);
-	const { loading: loadingQueue, queue } = useQueueById(eventLinkedQueueInWaitlist);
 	const [ landline, setLandline ] = useState(false);
 	const [ landphone, setLandphone ] = useState('');
 	const [ requiredItems, setRequiredItems ] = useState([]);
@@ -471,10 +468,6 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 	const languageChange = (lang) =>{
 		setLocale(lang);
 		languageChangeProps(lang);
-	}
-
-	if (loadingQueue){
-		return <Loading />;
 	}
 
 	return (

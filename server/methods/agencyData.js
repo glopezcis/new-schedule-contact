@@ -3,6 +3,10 @@ import { EXECUTEDACTION } from '/imports/constants/constants';
 
 Meteor.methods({
 
+  agencyData() {
+    return AgencyDataCollection.findOne();
+  },
+
   updateEmailMessage(emailNotification, emailText, source){
     const agencyData = AgencyDataCollection.findOne();
     let objToUpdate = {};
