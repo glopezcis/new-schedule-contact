@@ -731,7 +731,7 @@ Meteor.methods({
     });
 
     allItems.unshift(getQueueItemsLabels(type));
-    //allItems = flatten(allItems);
+
     return {
       contacts: allItems
     };
@@ -1531,9 +1531,7 @@ Meteor.methods({
       item.total = Number(scheduleData.slots);
 
       // used items
-      //console.log('Buscando para slot index => ', slotIndex);
       const usedItemsInThisSlot = items.filter(temp => {
-        //console.log('En => ', temp.selectedSlot.slotIndex);
         return temp.selectedSlot.slotIndex == slotIndex;
       });
       console.log('Items used => ', usedItemsInThisSlot.length);
