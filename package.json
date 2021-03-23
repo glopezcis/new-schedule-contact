@@ -1,5 +1,6 @@
 {
   "name": "@glopezcis/new-schedule-contact",
+  "version": "1.0.0",
   "description": "New Schedule Contact Component",
   "private": false,
   "scripts": {
