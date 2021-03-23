@@ -1,4 +1,4 @@
-export default STATES = [
+const STATES = [
   { name: "Alabama", _id: "AL"},
   { name: "Alaska", _id: "AK"},
   { name: "Arizona", _id: "AZ"},
@@ -50,3 +50,5 @@ export default STATES = [
   { name: "Wisconsin", _id: "WI"},
   { name: "Wyoming", _id: "WY"},
 ];
+
+export default STATES;

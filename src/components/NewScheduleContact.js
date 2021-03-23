@@ -4,25 +4,21 @@ import { Form as Formio } from 'react-formio';
 import { useForm } from 'react-hook-form';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
-import { uploadFileToS3 } from '/imports/startup/client/utils';
-import {IntlProvider, FormattedMessage} from 'react-intl';
-
+import { IntlProvider, FormattedMessage } from 'react-intl';
+import { EXECUTEDACTION, requiredColor, noRequiredColor } from '../constants/constants';
 import InputMask from "react-input-mask";
 import NumberFormat from 'react-number-format';
 import moment from 'moment';
+import messages from '../constants/translation.json';
+import STATES from '../pages/utils/constants.js';
+import LanguageSelector from "./LanguageSelector";
+import Loading from './Loading/Loading';
+import CustomDatePicker from './CustomDatePicker';
 
 const axios = require('axios');
 const caledarioIcon = <FontAwesomeIcon icon={faCalendarAlt} />;
 
-import { requiredColor, noRequiredColor } from '../../constants/constants';
-import { EXECUTEDACTION } from '/imports/constants/constants';
-import messages from '../../constants/translation.json';
-import STATES from '/imports/ui/pages/utils/constants.js';
-import LanguageSelector from "../components/LanguageSelector";
-import Loading from '../components/Loading/Loading';
-import CustomDatePicker from '../components/CustomDatePicker';
-
-export default NewScheduleContact = forwardRef((props, ref) => {
+const NewScheduleContact = forwardRef((props, ref) => {
 	const { 
 		index,
 		deleteItem,
@@ -39,10 +35,11 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 		languageChangeProps,
 		agencyData,
 		allCarriers,
-		queue
+		queue,
+		uploadFileToS3,
+		messageType
 	} = props;
 
-	let initDateOfContact = null;
 	let initDob = null;
 	let initDobInput = null;
 	const onlyLettersRegex = /^[a-zA-Z]*$/g
@@ -77,7 +74,6 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 	const [ landphone, setLandphone ] = useState('');
 	const [ requiredItems, setRequiredItems ] = useState([]);
 	const [locale, setLocale] = useState("en");
-	const [messageType, setMessageType] = useState('TWILIO');
 
 	useEffect(() => {
 		if (!agencyData) return;
@@ -86,12 +82,6 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 		const requiredItems = general.requiredInputs ? general.requiredInputs: [];
 		setRequiredItems(requiredItems);
 	}, [agencyData]);
-
-	useEffect(() => {
-		Meteor.call("getSMSType", (error, result) => {
-			setMessageType(result);
-		})		
-	}, []);
 
 	useEffect(() => {
 		if (props.contact) {
@@ -199,14 +189,14 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 		const { getMainInfo } = props;
 		const getMainInfoData = getMainInfo();
 		const auxInitialValues = {...initialValues};
-		if(keyToCopy == 'address') {
+		if(keyToCopy === 'address') {
 			auxInitialValues.address = getMainInfoData.address;
 			auxInitialValues.address2 = getMainInfoData.address2;
 			auxInitialValues.state = getMainInfoData.state;
 			auxInitialValues.city = getMainInfoData.city;
 			setInitialValues(auxInitialValues)
 			setZipcodeSearching(getMainInfoData.zip)
-		} else if (keyToCopy == 'insurance') {
+		} else if (keyToCopy === 'insurance') {
 			auxInitialValues.holderName = getMainInfoData.holderName;
 			auxInitialValues.insuranceType = getMainInfoData.insuranceType;
 			auxInitialValues.policyNumber = getMainInfoData.policyNumber;
@@ -365,19 +355,25 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 	const zipcodeSelected = (zipcodeText) => {
 		setInvalidZipcode(true);
 		setOojZipCode(false);
+
 		if (zipcodeText.length > 0 ) {
-			for (elements of zipcodeText[0].context){
-				if (elements.id.split('.')[0] == 'place'){
-					initialValues.city = elements.text
+
+			zipcodeText[0].context.forEach(element => {
+				switch (element.id.split('.')[0]) {
+					case 'place':
+						initialValues.city = element.text
+						break;
+					case 'region':
+						const stateFound = STATES.filter((state) => state.name == element.text);
+						if (stateFound.length > 0){
+							initialValues.state = stateFound[0]._id
+						}
+						break;
+					default:
 				}
-				if (elements.id.split('.')[0] == 'region' ){
-					const stateFound = STATES.filter((state) => state.name == elements.text)
-					if(stateFound.length > 0){
-						initialValues.state = stateFound[0]._id
-					}
-				}
-			}
-			if(!zipcodes.includes(zipcodeText[0].text)){
+			});
+
+			if (!zipcodes.includes(zipcodeText[0].text)) {
 				setOojZipCode(true)
 			}
 			setInvalidZipcode(false);
@@ -422,11 +418,11 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 	const evaluateIfRequired = (name)  => {
 		let result = false;
 		requiredItems.forEach(element => {
-			if(element.name == name){
+			if(element.name === name){
 				if(hideInsuranceData){
-					result = element.waitlist.required == true;
+					result = element.waitlist.required === true;
 				}else{
-					result = element.queue.required == true;
+					result = element.queue.required === true;
 				}
 			}
 		});
@@ -435,7 +431,7 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 
 	const LanguageLabel = function(name){
     let nameRequiered = evaluateIfRequired(name);
-    if (landline && name == 'phone') {
+    if (landline && name === 'phone') {
       nameRequiered = false;
     }
 
@@ -519,8 +515,8 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 						<Button
 							className="btn-info-tracker"
 							size="sm"
-							onClick={() => Meteor.call('createLogActionHistory', 'WaitlistsCollection',  'waitList', 'waitListView', null, null, EXECUTEDACTION['schedule'].id) }
-							href={`/queue/register/schedule/${queue.selfRegistrationUrl.code}?contactId=${initialValues._id}`}
+							//onClick={() => Meteor.call('createLogActionHistory', 'WaitlistsCollection',  'waitList', 'waitListView', null, null, EXECUTEDACTION['schedule'].id) }
+							//href={`/queue/register/schedule/${queue.selfRegistrationUrl.code}?contactId=${initialValues._id}`}
 						>
 							{ EXECUTEDACTION['schedule'].label }
 						</Button>
@@ -614,7 +610,6 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 						className="form-control form-control-sm"
 						name="gender"
 						defaultValue={initialValues.gender}
-						readOnly={readOnly}
 						ref={register}
 						required={evaluateIfRequired("gender")}
 						readOnly={readOnly}
@@ -659,10 +654,9 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 							name="dob"
 							type={"text"}
 							ref={register({ required: true })}
-							required
 							value={dobInput?dobInput:''}
 							onChange={event => formatterDateInput(event.target.value)}
-							required ={evaluateIfRequired("dob")}
+							required={evaluateIfRequired("dob")}
 						/>
 						<div className = 'button-show-calendar'>
 							<CustomDatePicker
@@ -866,7 +860,7 @@ export default NewScheduleContact = forwardRef((props, ref) => {
                 required ={evaluateIfRequired("phone") && !landline}
               />
             </Col>
-            {phone && messageType != 'AWS_SNS' && (
+            {phone && messageType !== 'AWS_SNS' && (
               <Col xs={4}>
                 {!landline ?
                 (<label style={{color: requiredColor}}>*{LanguageLabelComplements("carrier")}</label>)
@@ -1174,8 +1168,8 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 					<Col md={6} xs={12} className="mt-3">
 						<label>{LanguageLabelComplements("uploadCard")}</label>
 						<br />
-						<a href={urlCard} target="_blank">
-							<img style={{width: 100, height: 50}} src={urlCard} />
+						<a href={urlCard} target="_blank" rel="noreferrer">
+							<img style={{width: 100, height: 50}} src={urlCard} alt={LanguageLabelComplements("uploadCard")} />
 						</a>
 					</Col>)
 				}
@@ -1206,3 +1200,5 @@ export default NewScheduleContact = forwardRef((props, ref) => {
 		</form>
 	);
 });
+
+export default NewScheduleContact;

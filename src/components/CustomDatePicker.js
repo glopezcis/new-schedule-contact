@@ -1,8 +1,9 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
-import { MONTHS } from '/imports/constants/constants';
+import { MONTHS } from '../constants/constants';
 
-export default CustomDatePicker = props => {
+const CustomDatePicker = props => {
+  
   const { selectedDate,  setSelectedDate, showTime = false, showTimeOnly = false, disabled = false, customInput=''} = props;
 
   const currentYear = new Date().getFullYear();
@@ -89,3 +90,5 @@ export default CustomDatePicker = props => {
     />
   );
 }
+
+export default CustomDatePicker;
