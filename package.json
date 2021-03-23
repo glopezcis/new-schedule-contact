@@ -4,7 +4,7 @@
   "description": "New Schedule Contact Component",
   "private": false,
   "author": "glopezcis",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "scripts": {
     "start": "meteor run",
     "test": "meteor test --once --driver-package meteortesting:mocha",
