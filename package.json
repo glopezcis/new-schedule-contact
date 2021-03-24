@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "New Schedule Contact Component",
   "private": false,
+  "main": "index.js",
   "dependencies": {
     "@babel/runtime": "^7.10.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
