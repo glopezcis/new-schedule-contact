@@ -13,8 +13,7 @@
   },
   "scripts": {
     "build": "babel --ignore dist,node_modules . --out-dir dist",
-    "build_component": "babel --ignore dist,node_modules . --out-file index.js",
-    "compile": "babel src --out-dir public"
+    "build_component": "babel --ignore dist,node_modules . --out-file index.js"
   },
   "repository": {
     "type": "git",
@@ -36,10 +35,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.10",
-    "@babel/plugin-syntax-jsx": "^7.12.13",
-    "@babel/plugin-transform-react-jsx": "^7.13.12",
     "@babel/preset-env": "^7.13.12",
-    "@babel/preset-react": "^7.12.13"
+    "@babel/preset-react": "^7.12.13",
+    "@babel/plugin-syntax-jsx": "^7.12.13"
   },
   "babel": {
     "presets": [
