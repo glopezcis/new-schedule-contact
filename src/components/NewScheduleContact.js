@@ -2,7 +2,9 @@ import React from 'react';
 
 const NewScheduleContact = () => {
 	return (
-		<h1>texto</h1>
+		<>
+			<h1>texto</h1>
+		</>
 	);
 };
 
