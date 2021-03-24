@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "New Schedule Contact Component",
   "private": false,
+  "main": "index.js",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -10,10 +11,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "babel --ignore dist,node_modules . --out-dir dist",
+    "build_component": "babel --ignore dist,node_modules . --out-file index.js"
   },
   "repository": {
     "type": "git",
@@ -38,5 +37,12 @@
     "@babel/preset-env": "^7.13.12",
     "@babel/preset-react": "^7.12.13",
     "@babel/plugin-syntax-jsx": "^7.12.13"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-react",
+      "@babel/preset-env"
+    ],
+    "plugins": ["@babel/plugin-syntax-jsx"]
   }
 }
