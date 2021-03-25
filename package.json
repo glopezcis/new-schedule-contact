@@ -12,9 +12,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "build": "webpack",
-    "start": "webpack-dev-server --open --port 3000 --compress --mode development",
-    "dev": "webpack --mode development --progress"
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
