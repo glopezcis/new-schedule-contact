@@ -42,7 +42,12 @@
     "webpack-cli": "^3.3.10"
   },
   "babel": {
-    "presets": ["@babel/preset-react", "@babel/preset-env"],
-    "plugins": ["@babel/plugin-syntax-jsx"]
+    "presets": [
+      "@babel/preset-react",
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-syntax-jsx"
+    ]
   }
 }
