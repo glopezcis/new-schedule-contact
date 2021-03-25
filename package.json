@@ -5,13 +5,16 @@
   "private": false,
   "main": "./build/index.js",
   "dependencies": {
+    "react": "^16.13.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "start": "webpack-dev-server --open --port 3000 --compress --mode development",
+    "dev": "webpack --mode development --progress"
   },
   "repository": {
     "type": "git",
