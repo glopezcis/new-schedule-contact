@@ -8,12 +8,11 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "react-app-rewired": "^2.1.8",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build"
+    "build": "babel --ignore dist,node_modules . --out-dir dist",
+    "build_component": "babel --ignore dist,node_modules . --out-file index.js"
   },
   "repository": {
     "type": "git",
